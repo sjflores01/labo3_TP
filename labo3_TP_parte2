@@ -1,0 +1,45 @@
+use Bookworm
+create table paises(
+id int not null primary key identity (1,1),
+pais varchar(50)
+)
+go
+create table usuarios(
+id bigint not null unique identity(1,1),
+apellido varchar(50) not null,
+nombre varchar(50) not null,
+idPais int not null foreign key references paises(id),
+email varchar(100) not null primary key,
+fechaRegistro date not null default getdate(),
+sexo varchar(50),
+fechaNacimiento date,
+)
+go
+create table bibliotecas(
+id bigint not null primary key identity (1,1),
+idUsuario bigint not null references usuarios(id),
+nombre varchar(50),
+fechaCreacion date,
+)
+go
+create table libros_x_biblioteca(
+idLibro bigint not null foreign key references libros(id),
+idBiblioteca bigint not null foreign key references bibliotecas(id),
+valoracion smallint not null check(valoracion >= 0 and valoracion <= 10),
+conservacion smallint not null check(conservacion >= 0 and conservacion <= 10),
+precio float,
+fechaAdquisicion date,
+fechaComienzoLectura date,
+fechaFinLectura date
+)
+go
+create table formatos(
+id int not null primary key identity (1,1),
+formato varchar(50),
+)
+go
+create table formatos_x_libros(
+idLibro bigint not null foreign key references libros(id),
+idFormato int not null foreign key references formatos(id),
+primary key (idLibro,idFormato)
+)
